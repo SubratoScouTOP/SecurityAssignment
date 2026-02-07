@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduGate | Secure Student Portal</title>
+    <style>
+        :root { --primary: #4f46e5; --bg: #0f172a; --card: #1e293b; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .card { background: var(--card); padding: 2rem; border-radius: 1rem; width: 100%; max-width: 380px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5); border: 1px solid #334155; }
+        h1 { font-size: 1.5rem; text-align: center; margin-bottom: 0.5rem; color: #f8fafc; }
+        p.subtext { text-align: center; color: #94a3b8; font-size: 0.875rem; margin-bottom: 1.5rem; }
+        .input-group { margin-bottom: 1rem; }
+        label { display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #94a3b8; margin-bottom: 0.5rem; }
+        input { width: 100%; padding: 0.75rem; background: #0f172a; border: 1px solid #334155; border-radius: 0.5rem; color: white; box-sizing: border-box; }
+        button { width: 100%; padding: 0.75rem; border-radius: 0.5rem; border: none; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .btn-primary { background: var(--primary); color: white; margin-top: 1rem; }
+        .btn-primary:hover { background: #4338ca; }
+        .link-btn { background: none; color: #94a3b8; font-size: 0.875rem; margin-top: 1rem; text-decoration: underline; }
+        .error { color: #f87171; font-size: 0.875rem; text-align: center; margin-top: 1rem; }
+        .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.5rem; }
+        .stat-box { background: #0f172a; padding: 1rem; border-radius: 0.5rem; text-align: center; }
+    </style>
+</head>
+<body>
+
+    <div id="login-view" class="card">
+        <h1>EduGate Login</h1>
+        <p class="subtext">Secure Academic Access</p>
+        <div class="input-group">
+            <label>Username</label>
+            <input type="text" id="user-in" placeholder="student1">
+        </div>
+        <div class="input-group">
+            <label>Password</label>
+            <input type="password" id="pass-in" placeholder="••••••••">
+        </div>
+        <button class="btn-primary" onclick="login()">Authorize Session</button>
+        <button class="link-btn" onclick="toggleView('reset-view')">Forgot password?</button>
+        <div id="login-err" class="error"></div>
+    </div>
+
+    <div id="reset-view" class="card" style="display:none">
+        <h1>Account Recovery</h1>
+        <p class="subtext">Update your security credentials</p>
+        <div class="input-group">
+            <label>Target Username</label>
+            <input type="text" id="reset-user" value="student1">
+        </div>
+        <div class="input-group">
+            <label>New Secure Password</label>
+            <input type="password" id="reset-pass" placeholder="Enter new password">
+        </div>
+        <button class="btn-primary" onclick="resetPassword()">Update Password</button>
+        <button class="link-btn" onclick="toggleView('login-view')">Back to login</button>
+    </div>
+
+    <div id="dash-view" class="card" style="display:none">
+        <h1>Student Dashboard</h1>
+        <p class="subtext" id="student-name">Loading...</p>
+        <div class="stats">
+            <div class="stat-box"><small>GPA</small><div id="student-gpa" style="font-size: 1.25rem; font-weight: bold; color: #4ade80;">--</div></div>
+            <div class="stat-box"><small>ID</small><div id="student-id">--</div></div>
+        </div>
+        <button class="btn-primary" style="background:#334155; margin-top: 2rem;" onclick="location.reload()">Secure Logout</button>
+    </div>
+
+    <script>
+        function toggleView(id) {
+            ['login-view', 'reset-view', 'dash-view'].forEach(v => document.getElementById(v).style.display = 'none');
+            document.getElementById(id).style.display = 'block';
+        }
+
+        async function login() {
+            const res = await fetch('/login', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ username: document.getElementById('user-in').value, password: document.getElementById('pass-in').value })
+            });
+            if (res.ok) {
+                const data = await res.json();
+                localStorage.setItem('token', data.accessToken);
+                loadDashboard();
+            } else {
+                document.getElementById('login-err').innerText = "Access Denied: Invalid Credentials";
+            }
+        }
+
+        async function resetPassword() {
+            const res = await fetch('/api/reset-password', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ username: document.getElementById('reset-user').value, newPassword: document.getElementById('reset-pass').value })
+            });
+            if (res.ok) {
+                alert("Credentials updated. Please login with your new password.");
+                toggleView('login-view');
+            }
+        }
+
+        async function loadDashboard() {
+            const res = await fetch('/api/profile', {
+                headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`}
+            });
+            if (res.ok) {
+                const data = await res.json();
+                document.getElementById('student-name').innerText = data.name;
+                document.getElementById('student-gpa').innerText = data.gpa;
+                document.getElementById('student-id').innerText = data.id;
+                toggleView('dash-view');
+            }
+        }
+    </script>
+</body>
+</html>
