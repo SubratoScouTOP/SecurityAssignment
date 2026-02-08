@@ -487,12 +487,26 @@
 
           if (res.ok) {
             const profile = await res.json();
-            const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
+            let storedUser = JSON.parse(localStorage.getItem("user") || "null");
+
+            // Ensure we have a persisted user with a username for future loads
+            if (!storedUser) {
+              storedUser = {
+                username: profile.username || profile.name || "user",
+              };
+              localStorage.setItem("user", JSON.stringify(storedUser));
+            } else if (!storedUser.username && (profile.username || profile.name)) {
+              storedUser = {
+                ...storedUser,
+                username: storedUser.username || profile.username || profile.name,
+              };
+              localStorage.setItem("user", JSON.stringify(storedUser));
+            }
 
             document.getElementById("dash-welcome").innerText =
               `Welcome, ${profile.name}!`;
             document.getElementById("dash-username").innerText =
-              `@${storedUser.username || "user"}`;
+              `@${storedUser.username}`;
             document.getElementById("dash-id").innerText = profile.id;
             document.getElementById("dash-major").innerText = profile.major;
             document.getElementById("dash-gpa").innerText = profile.gpa;
