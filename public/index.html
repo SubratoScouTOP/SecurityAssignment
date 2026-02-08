@@ -1,115 +1,640 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>EduGate | Secure Student Portal</title>
     <style>
-        :root { --primary: #4f46e5; --bg: #0f172a; --card: #1e293b; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .card { background: var(--card); padding: 2rem; border-radius: 1rem; width: 100%; max-width: 380px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5); border: 1px solid #334155; }
-        h1 { font-size: 1.5rem; text-align: center; margin-bottom: 0.5rem; color: #f8fafc; }
-        p.subtext { text-align: center; color: #94a3b8; font-size: 0.875rem; margin-bottom: 1.5rem; }
-        .input-group { margin-bottom: 1rem; }
-        label { display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #94a3b8; margin-bottom: 0.5rem; }
-        input { width: 100%; padding: 0.75rem; background: #0f172a; border: 1px solid #334155; border-radius: 0.5rem; color: white; box-sizing: border-box; }
-        button { width: 100%; padding: 0.75rem; border-radius: 0.5rem; border: none; font-weight: 600; cursor: pointer; transition: 0.2s; }
-        .btn-primary { background: var(--primary); color: white; margin-top: 1rem; }
-        .btn-primary:hover { background: #4338ca; }
-        .link-btn { background: none; color: #94a3b8; font-size: 0.875rem; margin-top: 1rem; text-decoration: underline; }
-        .error { color: #f87171; font-size: 0.875rem; text-align: center; margin-top: 1rem; }
-        .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.5rem; }
-        .stat-box { background: #0f172a; padding: 1rem; border-radius: 0.5rem; text-align: center; }
+      :root {
+        --primary: #4f46e5;
+        --bg: #0f172a;
+        --card: #1e293b;
+      }
+      body {
+        font-family: "Segoe UI", sans-serif;
+        background: var(--bg);
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+      }
+      .card {
+        background: var(--card);
+        padding: 2rem;
+        border-radius: 1rem;
+        width: 100%;
+        max-width: 380px;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+        border: 1px solid #334155;
+      }
+      h1 {
+        font-size: 1.5rem;
+        text-align: center;
+        margin-bottom: 0.5rem;
+        color: #f8fafc;
+      }
+      h2 {
+        font-size: 1.25rem;
+        text-align: center;
+        margin-bottom: 0.5rem;
+        color: #f8fafc;
+      }
+      p.subtext {
+        text-align: center;
+        color: #94a3b8;
+        font-size: 0.875rem;
+        margin-bottom: 1.5rem;
+      }
+      .input-group {
+        margin-bottom: 1rem;
+      }
+      label {
+        display: block;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #94a3b8;
+        margin-bottom: 0.5rem;
+      }
+      input {
+        width: 100%;
+        padding: 0.75rem;
+        background: #0f172a;
+        border: 1px solid #334155;
+        border-radius: 0.5rem;
+        color: white;
+        box-sizing: border-box;
+      }
+      input:focus {
+        outline: none;
+        border-color: var(--primary);
+      }
+      button {
+        width: 100%;
+        padding: 0.75rem;
+        border-radius: 0.5rem;
+        border: none;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+      .btn-primary {
+        background: var(--primary);
+        color: white;
+        margin-top: 1rem;
+      }
+      .btn-primary:hover {
+        background: #4338ca;
+      }
+      .btn-secondary {
+        background: #334155;
+        color: white;
+        margin-top: 0.5rem;
+      }
+      .btn-secondary:hover {
+        background: #475569;
+      }
+      .btn-danger {
+        background: #dc2626;
+        color: white;
+        margin-top: 0.5rem;
+      }
+      .btn-danger:hover {
+        background: #b91c1c;
+      }
+      .link-btn {
+        background: none;
+        color: #94a3b8;
+        font-size: 0.875rem;
+        margin-top: 1rem;
+        text-decoration: underline;
+        border: none;
+        width: auto;
+      }
+      .error {
+        color: #f87171;
+        font-size: 0.875rem;
+        text-align: center;
+        margin-top: 1rem;
+      }
+      .success {
+        color: #4ade80;
+        font-size: 0.875rem;
+        text-align: center;
+        margin-top: 1rem;
+      }
+      .stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin-top: 1.5rem;
+      }
+      .stat-box {
+        background: #0f172a;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        text-align: center;
+      }
+      .tabs {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 1.5rem;
+      }
+      .tab {
+        flex: 1;
+        padding: 0.5rem;
+        background: #334155;
+        border: none;
+        color: #94a3b8;
+        border-radius: 0.5rem;
+        cursor: pointer;
+      }
+      .tab.active {
+        background: var(--primary);
+        color: white;
+      }
+      .welcome-banner {
+        background: linear-gradient(135deg, #4f46e5, #7c3aed);
+        padding: 1rem;
+        border-radius: 0.75rem;
+        margin-bottom: 1.5rem;
+        text-align: center;
+      }
+      .welcome-banner h2 {
+        margin: 0;
+        font-size: 1.1rem;
+      }
+      .welcome-banner p {
+        margin: 0.5rem 0 0;
+        opacity: 0.9;
+        font-size: 0.85rem;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
+    <!-- Auth Card -->
+    <div id="auth-card" class="card">
+      <div class="tabs">
+        <button class="tab active" id="tab-login" onclick="showTab('login')">
+          Login
+        </button>
+        <button class="tab" id="tab-register" onclick="showTab('register')">
+          Register
+        </button>
+      </div>
 
-    <div id="login-view" class="card">
+      <!-- Login Form -->
+      <div id="login-form">
         <h1>EduGate Login</h1>
         <p class="subtext">Secure Academic Access</p>
+
         <div class="input-group">
-            <label>Username</label>
-            <input type="text" id="user-in" placeholder="student1">
+          <label>Username</label>
+          <input type="text" id="login-username" placeholder="Enter username" />
         </div>
         <div class="input-group">
-            <label>Password</label>
-            <input type="password" id="pass-in" placeholder="••••••••">
+          <label>Password</label>
+          <input
+            type="password"
+            id="login-password"
+            placeholder="Enter password"
+          />
         </div>
-        <button class="btn-primary" onclick="login()">Authorize Session</button>
-        <button class="link-btn" onclick="toggleView('reset-view')">Forgot password?</button>
-        <div id="login-err" class="error"></div>
+        <button class="btn-primary" onclick="login()">Sign In</button>
+        <div id="login-error" class="error"></div>
+      </div>
+
+      <!-- Register Form -->
+      <div id="register-form" style="display: none">
+        <h1>Create Account</h1>
+        <p class="subtext">Join EduGate Portal</p>
+
+        <div class="input-group">
+          <label>Username (3-20 chars, letters/numbers only)</label>
+          <input
+            type="text"
+            id="reg-username"
+            placeholder="Choose username"
+            oninput="checkUsername()"
+          />
+          <div
+            id="username-check"
+            style="font-size: 0.75rem; margin-top: 0.25rem"
+          ></div>
+        </div>
+        <div class="input-group">
+          <label>Full Name</label>
+          <input type="text" id="reg-name" placeholder="Your full name" />
+        </div>
+        <div class="input-group">
+          <label>Student ID</label>
+          <input type="text" id="reg-id" placeholder="Your student ID" />
+        </div>
+        <div class="input-group">
+          <label>Password (min 6 characters)</label>
+          <input
+            type="password"
+            id="reg-password"
+            placeholder="Create password"
+          />
+        </div>
+        <div class="input-group">
+          <label>Confirm Password</label>
+          <input
+            type="password"
+            id="reg-password-confirm"
+            placeholder="Confirm password"
+          />
+        </div>
+        <button class="btn-primary" onclick="register()">Create Account</button>
+        <div id="register-error" class="error"></div>
+        <div id="register-success" class="success"></div>
+      </div>
     </div>
 
-    <div id="reset-view" class="card" style="display:none">
-        <h1>Account Recovery</h1>
-        <p class="subtext">Update your security credentials</p>
-        <div class="input-group">
-            <label>Target Username</label>
-            <input type="text" id="reset-user" value="student1">
+    <!-- Dashboard Card -->
+    <div id="dashboard-card" class="card" style="display: none">
+      <div class="welcome-banner">
+        <h2 id="dash-welcome">Welcome!</h2>
+        <p id="dash-username">@username</p>
+      </div>
+
+      <div class="stats">
+        <div class="stat-box">
+          <small>Student ID</small>
+          <div id="dash-id" style="font-size: 1rem; font-weight: bold">--</div>
         </div>
-        <div class="input-group">
-            <label>New Secure Password</label>
-            <input type="password" id="reset-pass" placeholder="Enter new password">
+        <div class="stat-box">
+          <small>Major</small>
+          <div id="dash-major" style="font-size: 0.9rem">--</div>
         </div>
-        <button class="btn-primary" onclick="resetPassword()">Update Password</button>
-        <button class="link-btn" onclick="toggleView('login-view')">Back to login</button>
+        <div class="stat-box">
+          <small>GPA</small>
+          <div
+            id="dash-gpa"
+            style="font-size: 1.25rem; font-weight: bold; color: #4ade80"
+          >
+            --
+          </div>
+        </div>
+        <div class="stat-box">
+          <small>Name</small>
+          <div id="dash-name" style="font-size: 0.9rem">--</div>
+        </div>
+      </div>
+
+      <button class="btn-secondary" onclick="showChangePassword()">
+        Change Password
+      </button>
+      <button class="btn-danger" onclick="logout()">Sign Out</button>
     </div>
 
-    <div id="dash-view" class="card" style="display:none">
-        <h1>Student Dashboard</h1>
-        <p class="subtext" id="student-name">Loading...</p>
-        <div class="stats">
-            <div class="stat-box"><small>GPA</small><div id="student-gpa" style="font-size: 1.25rem; font-weight: bold; color: #4ade80;">--</div></div>
-            <div class="stat-box"><small>ID</small><div id="student-id">--</div></div>
-        </div>
-        <button class="btn-primary" style="background:#334155; margin-top: 2rem;" onclick="location.reload()">Secure Logout</button>
+    <!-- Change Password Card -->
+    <div id="password-card" class="card" style="display: none">
+      <h1>Change Password</h1>
+      <p class="subtext">Update your credentials</p>
+
+      <div class="input-group">
+        <label>Current Password</label>
+        <input type="password" id="curr-pass" placeholder="Current password" />
+      </div>
+      <div class="input-group">
+        <label>New Password</label>
+        <input
+          type="password"
+          id="new-pass"
+          placeholder="New password (min 6 chars)"
+        />
+      </div>
+      <div class="input-group">
+        <label>Confirm New Password</label>
+        <input
+          type="password"
+          id="new-pass-confirm"
+          placeholder="Confirm new password"
+        />
+      </div>
+
+      <button class="btn-primary" onclick="changePassword()">
+        Update Password
+      </button>
+      <button class="btn-secondary" onclick="showDashboard()">
+        Back to Dashboard
+      </button>
+      <div id="password-error" class="error"></div>
+      <div id="password-success" class="success"></div>
     </div>
 
     <script>
-        function toggleView(id) {
-            ['login-view', 'reset-view', 'dash-view'].forEach(v => document.getElementById(v).style.display = 'none');
-            document.getElementById(id).style.display = 'block';
+      let currentUser = null;
+
+      // Initialize
+      const token = localStorage.getItem("token");
+      if (token) {
+        loadDashboard();
+      }
+
+      function showTab(tab) {
+        document.getElementById("login-form").style.display =
+          tab === "login" ? "block" : "none";
+        document.getElementById("register-form").style.display =
+          tab === "register" ? "block" : "none";
+        document
+          .getElementById("tab-login")
+          .classList.toggle("active", tab === "login");
+        document
+          .getElementById("tab-register")
+          .classList.toggle("active", tab === "register");
+
+        // Clear messages
+        clearMessages();
+      }
+
+      function clearMessages() {
+        document.getElementById("login-error").innerText = "";
+        document.getElementById("register-error").innerText = "";
+        document.getElementById("register-success").innerText = "";
+        document.getElementById("password-error").innerText = "";
+        document.getElementById("password-success").innerText = "";
+      }
+
+      async function checkUsername() {
+        const username = document.getElementById("reg-username").value;
+        const checkDiv = document.getElementById("username-check");
+
+        if (username.length < 3) {
+          checkDiv.innerText = "";
+          return;
         }
 
-        async function login() {
-            const res = await fetch('/login', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ username: document.getElementById('user-in').value, password: document.getElementById('pass-in').value })
-            });
-            if (res.ok) {
-                const data = await res.json();
-                localStorage.setItem('token', data.accessToken);
-                loadDashboard();
-            } else {
-                document.getElementById('login-err').innerText = "Access Denied: Invalid Credentials";
-            }
+        try {
+          const res = await fetch(`/api/check-username/${username}`);
+          const data = await res.json();
+
+          if (data.available) {
+            checkDiv.innerText = "✓ Username available";
+            checkDiv.style.color = "#4ade80";
+          } else {
+            checkDiv.innerText = "✗ Username taken";
+            checkDiv.style.color = "#f87171";
+          }
+        } catch (e) {
+          checkDiv.innerText = "";
+        }
+      }
+
+      async function register() {
+        const username = document.getElementById("reg-username").value.trim();
+        const name = document.getElementById("reg-name").value.trim();
+        const id = document.getElementById("reg-id").value.trim();
+        const password = document.getElementById("reg-password").value;
+        const confirm = document.getElementById("reg-password-confirm").value;
+
+        document.getElementById("register-error").innerText = "";
+
+        // Validation
+        if (!username || !name || !id || !password) {
+          document.getElementById("register-error").innerText =
+            "All fields are required";
+          return;
         }
 
-        async function resetPassword() {
-            const res = await fetch('/api/reset-password', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ username: document.getElementById('reset-user').value, newPassword: document.getElementById('reset-pass').value })
-            });
-            if (res.ok) {
-                alert("Credentials updated. Please login with your new password.");
-                toggleView('login-view');
-            }
+        if (password !== confirm) {
+          document.getElementById("register-error").innerText =
+            "Passwords do not match";
+          return;
         }
 
-        async function loadDashboard() {
-            const res = await fetch('/api/profile', {
-                headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`}
-            });
-            if (res.ok) {
-                const data = await res.json();
-                document.getElementById('student-name').innerText = data.name;
-                document.getElementById('student-gpa').innerText = data.gpa;
-                document.getElementById('student-id').innerText = data.id;
-                toggleView('dash-view');
-            }
+        if (password.length < 6) {
+          document.getElementById("register-error").innerText =
+            "Password must be at least 6 characters";
+          return;
         }
+
+        try {
+          const res = await fetch("/api/register", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, name, id, password }),
+          });
+
+          const data = await res.json();
+
+          if (res.ok) {
+            document.getElementById("register-success").innerText =
+              "Account created! Switching to login...";
+            setTimeout(() => {
+              document.getElementById("login-username").value = username;
+              showTab("login");
+              document.getElementById("login-password").value = password;
+            }, 1500);
+          } else {
+            document.getElementById("register-error").innerText = data.error;
+          }
+        } catch (e) {
+          document.getElementById("register-error").innerText =
+            "Network error. Please try again.";
+        }
+      }
+
+      async function login() {
+        const username = document.getElementById("login-username").value.trim();
+        const password = document.getElementById("login-password").value;
+
+        document.getElementById("login-error").innerText = "";
+
+        if (!username || !password) {
+          document.getElementById("login-error").innerText =
+            "Username and password required";
+          return;
+        }
+
+        try {
+          const res = await fetch("/api/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, password }),
+          });
+
+          const data = await res.json();
+
+          if (res.ok) {
+            localStorage.setItem("token", data.accessToken);
+            localStorage.setItem("user", JSON.stringify(data.user));
+            currentUser = data.user;
+            loadDashboard();
+          } else {
+            document.getElementById("login-error").innerText = data.error;
+          }
+        } catch (e) {
+          document.getElementById("login-error").innerText =
+            "Network error. Please try again.";
+        }
+      }
+
+      async function loadDashboard() {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          showAuth();
+          return;
+        }
+
+        try {
+          const res = await fetch("/api/profile", {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+
+          if (res.ok) {
+            const profile = await res.json();
+            let storedUser = JSON.parse(localStorage.getItem("user") || "null");
+
+            // Ensure we have a persisted user with a username for future loads
+            if (!storedUser) {
+              storedUser = {
+                username: profile.username || profile.name || "user",
+              };
+              localStorage.setItem("user", JSON.stringify(storedUser));
+            } else if (!storedUser.username && (profile.username || profile.name)) {
+              storedUser = {
+                ...storedUser,
+                username: storedUser.username || profile.username || profile.name,
+              };
+              localStorage.setItem("user", JSON.stringify(storedUser));
+            }
+
+            document.getElementById("dash-welcome").innerText =
+              `Welcome, ${profile.name}!`;
+            document.getElementById("dash-username").innerText =
+              `@${storedUser.username}`;
+            document.getElementById("dash-id").innerText = profile.id;
+            document.getElementById("dash-major").innerText = profile.major;
+            document.getElementById("dash-gpa").innerText = profile.gpa;
+            document.getElementById("dash-name").innerText = profile.name;
+
+            showDashboard();
+          } else {
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
+            showAuth();
+          }
+        } catch (e) {
+          document.getElementById("login-error").innerText = "Network error";
+          showAuth();
+        }
+      }
+
+      function showDashboard() {
+        document.getElementById("auth-card").style.display = "none";
+        document.getElementById("password-card").style.display = "none";
+        document.getElementById("dashboard-card").style.display = "block";
+        clearMessages();
+      }
+
+      function showAuth() {
+        document.getElementById("auth-card").style.display = "block";
+        document.getElementById("dashboard-card").style.display = "none";
+        document.getElementById("password-card").style.display = "none";
+      }
+
+      function showChangePassword() {
+        document.getElementById("dashboard-card").style.display = "none";
+        document.getElementById("password-card").style.display = "block";
+        clearMessages();
+      }
+
+      async function changePassword() {
+        const current = document.getElementById("curr-pass").value;
+        const newPass = document.getElementById("new-pass").value;
+        const confirm = document.getElementById("new-pass-confirm").value;
+        const token = localStorage.getItem("token");
+
+        document.getElementById("password-error").innerText = "";
+
+        if (!current || !newPass) {
+          document.getElementById("password-error").innerText =
+            "All fields are required";
+          return;
+        }
+
+        if (newPass.length < 6) {
+          document.getElementById("password-error").innerText =
+            "New password must be at least 6 characters";
+          return;
+        }
+
+        if (newPass !== confirm) {
+          document.getElementById("password-error").innerText =
+            "Passwords do not match";
+          return;
+        }
+
+        try {
+          const res = await fetch("/api/change-password", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              currentPassword: current,
+              newPassword: newPass,
+            }),
+          });
+
+          const data = await res.json();
+
+          if (res.ok) {
+            document.getElementById("password-success").innerText =
+              "Password changed successfully!";
+            document.getElementById("curr-pass").value = "";
+            document.getElementById("new-pass").value = "";
+            document.getElementById("new-pass-confirm").value = "";
+            setTimeout(showDashboard, 1500);
+          } else {
+            document.getElementById("password-error").innerText = data.error;
+          }
+        } catch (e) {
+          document.getElementById("password-error").innerText =
+            "Network error. Please try again.";
+        }
+      }
+
+      function logout() {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        currentUser = null;
+
+        // Clear forms
+        document.getElementById("login-username").value = "";
+        document.getElementById("login-password").value = "";
+        document.getElementById("curr-pass").value = "";
+        document.getElementById("new-pass").value = "";
+        document.getElementById("new-pass-confirm").value = "";
+
+        clearMessages();
+        showAuth();
+      }
+
+      // Enter key support
+      document.addEventListener("DOMContentLoaded", () => {
+        document
+          .getElementById("login-password")
+          .addEventListener("keypress", (e) => {
+            if (e.key === "Enter") login();
+          });
+        document
+          .getElementById("reg-password-confirm")
+          .addEventListener("keypress", (e) => {
+            if (e.key === "Enter") register();
+          });
+        document
+          .getElementById("new-pass-confirm")
+          .addEventListener("keypress", (e) => {
+            if (e.key === "Enter") changePassword();
+          });
+      });
     </script>
-</body>
+  </body>
 </html>
