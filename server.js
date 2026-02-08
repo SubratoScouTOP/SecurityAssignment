@@ -8,9 +8,25 @@ require("dotenv").config();
 
 const app = express();
 
+const allowedOrigins = [
+  "http://localhost:3000",
+  "http://127.0.0.1:3000",
+];
+
 app.use(cors({
-  origin: true,
-  credentials: true,
+  origin: (origin, callback) => {
+    // Allow requests with no origin (e.g., curl, server-to-server)
+    if (!origin) {
+      return callback(null, true);
+    }
+
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    return callback(new Error("Not allowed by CORS"));
+  },
+  credentials: false,
 }));
 
 app.use(express.static("public"));
