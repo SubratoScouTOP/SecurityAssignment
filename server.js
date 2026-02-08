@@ -215,5 +215,4 @@ const options = {
 
 https.createServer(options, app).listen(3000, () => {
   console.log("University Portal running at https://localhost:3000");
-  console.log("Default login: student1 / password123");
 });
