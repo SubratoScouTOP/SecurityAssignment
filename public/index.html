@@ -462,6 +462,7 @@
 
           if (res.ok) {
             localStorage.setItem("token", data.accessToken);
+            localStorage.setItem("user", JSON.stringify(data.user));
             currentUser = data.user;
             loadDashboard();
           } else {
